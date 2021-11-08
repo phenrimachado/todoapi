@@ -1,6 +1,6 @@
 # Todo API
 
-## 😊 Why?
+## Why?
 
 This project was the first challenge on Rocketseat's NodeJS track. Created with NodeJS and using the Express framework for requests, the challenge was to create an API with Todo CRUD, using middleware to control business rules.
 
