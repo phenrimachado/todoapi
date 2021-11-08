@@ -1,8 +1,10 @@
 const express = require("express")
+const cors = require("cors")
 const { v4 } = require("uuid")
 
 const app = express()
 
+app.use(cors())
 app.use(express.json())
 
 const users = []
@@ -73,13 +75,13 @@ app.put("/todos/:id", checkExistsUserAccount, (request, response) => {
   const indexOfTodo = user.todos.findIndex(todo => todo.id === id)
 
   if(indexOfTodo == -1) {
-    return response.status(400).json({ error: "Todo don't found!" })
+    return response.status(404).json({ error: "Todo don't found!" })
   }
 
   user.todos[indexOfTodo].title = title
   user.todos[indexOfTodo].deadline = deadline
 
-  return response.send()
+  return response.json(user.todos[indexOfTodo])
 })
 
 app.patch("/todos/:id/done", checkExistsUserAccount, (request, response) => {
@@ -89,12 +91,12 @@ app.patch("/todos/:id/done", checkExistsUserAccount, (request, response) => {
   const indexOfTodo = user.todos.findIndex(todo => todo.id === id)
 
   if(indexOfTodo == -1) {
-    return response.status(400).json({ error: "Todo don't found!" })
+    return response.status(404).json({ error: "Todo don't found!" })
   }
 
   user.todos[indexOfTodo].done = true
 
-  return response.send()
+  return response.json(user.todos[indexOfTodo])
 })
 
 app.delete("/todos/:id", checkExistsUserAccount, (request, response) => {
@@ -104,14 +106,12 @@ app.delete("/todos/:id", checkExistsUserAccount, (request, response) => {
   const indexOfTodo = user.todos.findIndex(todo => todo.id === id)
 
   if(indexOfTodo == -1) {
-    return response.status(400).json({ error: "Todo don't found!" })
+    return response.status(404).json({ error: "Todo don't found!" })
   }
 
   user.todos.splice(indexOfTodo, 1)
 
-  return response.send()
+  return response.status(204).send()
 })
 
-app.listen(3333, () => {
-  console.log("Server Running on PORT 3333")
-})
+module.exports = app;
